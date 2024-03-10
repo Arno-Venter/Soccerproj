@@ -15,7 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ICountryService, CountryService> ();
 
-builder.Services.AddDbContext<SoccerContext>(options => {
+builder.Services.AddDbContext<SoccerContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 

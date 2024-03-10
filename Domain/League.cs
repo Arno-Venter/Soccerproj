@@ -12,4 +12,6 @@ public partial class League
     public string? Name { get; set; }
 
     public virtual Country? Country { get; set; }
+
+    public virtual ICollection<Match> Matches { get; set; } = new List<Match>();
 }

@@ -39,8 +39,7 @@ public partial class SoccerContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasColumnType("ntext")
                 .HasColumnName("name");
         });
 
@@ -51,19 +50,16 @@ public partial class SoccerContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CountryId).HasColumnName("country_id");
             entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .IsUnicode(false)
+                .HasColumnType("ntext")
                 .HasColumnName("name");
 
             entity.HasOne(d => d.Country).WithMany(p => p.Leagues)
                 .HasForeignKey(d => d.CountryId)
-                .HasConstraintName("FK_LEAGUE_COUNTRY");
+                .HasConstraintName("FK_Country_League");
         });
 
         modelBuilder.Entity<Match>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_Match_1");
-
             entity.ToTable("Match");
 
             entity.Property(e => e.Id).HasColumnName("id");
@@ -201,6 +197,14 @@ public partial class SoccerContext : DbContext
             entity.Property(e => e.Wha).HasColumnName("WHA");
             entity.Property(e => e.Whd).HasColumnName("WHD");
             entity.Property(e => e.Whh).HasColumnName("WHH");
+
+            entity.HasOne(d => d.Country).WithMany(p => p.Matches)
+                .HasForeignKey(d => d.CountryId)
+                .HasConstraintName("FK_Country_Match");
+
+            entity.HasOne(d => d.League).WithMany(p => p.Matches)
+                .HasForeignKey(d => d.LeagueId)
+                .HasConstraintName("FK_League_Match");
         });
 
         modelBuilder.Entity<Player>(entity =>
@@ -211,18 +215,13 @@ public partial class SoccerContext : DbContext
             entity.Property(e => e.Birthday)
                 .HasColumnType("ntext")
                 .HasColumnName("birthday");
-            entity.Property(e => e.Height)
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("height");
-            entity.Property(e => e.PlayFifaApiId).HasColumnName("play_fifa_api_id");
+            entity.Property(e => e.Height).HasColumnName("height");
             entity.Property(e => e.PlayerApiId).HasColumnName("player_api_id");
+            entity.Property(e => e.PlayerFifaApiId).HasColumnName("player_fifa_api_id");
             entity.Property(e => e.PlayerName)
-                .HasMaxLength(100)
-                .IsUnicode(false)
+                .HasColumnType("ntext")
                 .HasColumnName("player_name");
-            entity.Property(e => e.Weight)
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("weight");
+            entity.Property(e => e.Weight).HasColumnName("weight");
         });
 
         modelBuilder.Entity<PlayerAttribute>(entity =>
@@ -231,12 +230,35 @@ public partial class SoccerContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Acceleration).HasColumnName("acceleration");
+            entity.Property(e => e.Aggression).HasColumnName("aggression");
             entity.Property(e => e.Agility).HasColumnName("agility");
+            entity.Property(e => e.AttackingWorkRate)
+                .HasColumnType("ntext")
+                .HasColumnName("attacking_work_rate");
+            entity.Property(e => e.Balance).HasColumnName("balance");
             entity.Property(e => e.BallControl).HasColumnName("ball_control");
+            entity.Property(e => e.Crossing).HasColumnName("crossing");
+            entity.Property(e => e.Curve).HasColumnName("curve");
             entity.Property(e => e.Date)
                 .HasColumnType("ntext")
                 .HasColumnName("date");
+            entity.Property(e => e.DefensiveWorkRate)
+                .HasColumnType("ntext")
+                .HasColumnName("defensive_work_rate");
+            entity.Property(e => e.Dribbling).HasColumnName("dribbling");
+            entity.Property(e => e.Finishing).HasColumnName("finishing");
+            entity.Property(e => e.FreeKickAccuracy).HasColumnName("free_kick_accuracy");
+            entity.Property(e => e.GkDiving).HasColumnName("gk_diving");
+            entity.Property(e => e.GkHandling).HasColumnName("gk_handling");
+            entity.Property(e => e.GkKicking).HasColumnName("gk_kicking");
+            entity.Property(e => e.GkPositioning).HasColumnName("gk_positioning");
+            entity.Property(e => e.GkReflexes).HasColumnName("gk_reflexes");
+            entity.Property(e => e.HeadingAccuracy).HasColumnName("heading_accuracy");
+            entity.Property(e => e.Interceptions).HasColumnName("interceptions");
+            entity.Property(e => e.Jumping).HasColumnName("jumping");
             entity.Property(e => e.LongPassing).HasColumnName("long_passing");
+            entity.Property(e => e.LongShots).HasColumnName("long_shots");
+            entity.Property(e => e.Marking).HasColumnName("marking");
             entity.Property(e => e.OverallRating).HasColumnName("overall_rating");
             entity.Property(e => e.Penalties).HasColumnName("penalties");
             entity.Property(e => e.PlayerApiId).HasColumnName("player_api_id");
@@ -244,11 +266,18 @@ public partial class SoccerContext : DbContext
             entity.Property(e => e.Positioning).HasColumnName("positioning");
             entity.Property(e => e.Potential).HasColumnName("potential");
             entity.Property(e => e.PreferredFoot)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasColumnType("ntext")
                 .HasColumnName("preferred_foot");
+            entity.Property(e => e.Reactions).HasColumnName("reactions");
             entity.Property(e => e.ShortPassing).HasColumnName("short_passing");
             entity.Property(e => e.ShotPower).HasColumnName("shot_power");
+            entity.Property(e => e.SlidingTackle).HasColumnName("sliding_tackle");
+            entity.Property(e => e.SprintSpeed).HasColumnName("sprint_speed");
+            entity.Property(e => e.Stamina).HasColumnName("stamina");
+            entity.Property(e => e.StandingTackle).HasColumnName("standing_tackle");
+            entity.Property(e => e.Strength).HasColumnName("strength");
+            entity.Property(e => e.Vision).HasColumnName("vision");
+            entity.Property(e => e.Volleys).HasColumnName("volleys");
         });
 
         modelBuilder.Entity<Team>(entity =>
@@ -259,12 +288,10 @@ public partial class SoccerContext : DbContext
             entity.Property(e => e.TeamApiId).HasColumnName("team_api_id");
             entity.Property(e => e.TeamFifaApiId).HasColumnName("team_fifa_api_id");
             entity.Property(e => e.TeamLongName)
-                .HasMaxLength(100)
-                .IsUnicode(false)
+                .HasColumnType("ntext")
                 .HasColumnName("team_long_name");
             entity.Property(e => e.TeamShortName)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasColumnType("ntext")
                 .HasColumnName("team_short_name");
         });
 
@@ -273,6 +300,54 @@ public partial class SoccerContext : DbContext
             entity.ToTable("Team_Attributes");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.BuildUpPlayDribbling).HasColumnName("buildUpPlayDribbling");
+            entity.Property(e => e.BuildUpPlayDribblingClass)
+                .HasColumnType("ntext")
+                .HasColumnName("buildUpPlayDribblingClass");
+            entity.Property(e => e.BuildUpPlayPassing).HasColumnName("buildUpPlayPassing");
+            entity.Property(e => e.BuildUpPlayPassingClass)
+                .HasColumnType("ntext")
+                .HasColumnName("buildUpPlayPassingClass");
+            entity.Property(e => e.BuildUpPlayPositioningClass)
+                .HasColumnType("ntext")
+                .HasColumnName("buildUpPlayPositioningClass");
+            entity.Property(e => e.BuildUpPlaySpeed).HasColumnName("buildUpPlaySpeed");
+            entity.Property(e => e.BuildUpPlaySpeedClass)
+                .HasColumnType("ntext")
+                .HasColumnName("buildUpPlaySpeedClass");
+            entity.Property(e => e.ChanceCreationCrossing).HasColumnName("chanceCreationCrossing");
+            entity.Property(e => e.ChanceCreationCrossingClass)
+                .HasColumnType("ntext")
+                .HasColumnName("chanceCreationCrossingClass");
+            entity.Property(e => e.ChanceCreationPassing).HasColumnName("chanceCreationPassing");
+            entity.Property(e => e.ChanceCreationPassingClass)
+                .HasColumnType("ntext")
+                .HasColumnName("chanceCreationPassingClass");
+            entity.Property(e => e.ChanceCreationPositioningClass)
+                .HasColumnType("ntext")
+                .HasColumnName("chanceCreationPositioningClass");
+            entity.Property(e => e.ChanceCreationShooting).HasColumnName("chanceCreationShooting");
+            entity.Property(e => e.ChanceCreationShootingClass)
+                .HasColumnType("ntext")
+                .HasColumnName("chanceCreationShootingClass");
+            entity.Property(e => e.Date)
+                .HasColumnType("ntext")
+                .HasColumnName("date");
+            entity.Property(e => e.DefenceAggression).HasColumnName("defenceAggression");
+            entity.Property(e => e.DefenceAggressionClass)
+                .HasColumnType("ntext")
+                .HasColumnName("defenceAggressionClass");
+            entity.Property(e => e.DefenceDefenderLineClass)
+                .HasColumnType("ntext")
+                .HasColumnName("defenceDefenderLineClass");
+            entity.Property(e => e.DefencePressure).HasColumnName("defencePressure");
+            entity.Property(e => e.DefencePressureClass)
+                .HasColumnType("ntext")
+                .HasColumnName("defencePressureClass");
+            entity.Property(e => e.DefenceTeamWidth).HasColumnName("defenceTeamWidth");
+            entity.Property(e => e.DefenceTeamWidthClass)
+                .HasColumnType("ntext")
+                .HasColumnName("defenceTeamWidthClass");
             entity.Property(e => e.TeamApiId).HasColumnName("team_api_id");
             entity.Property(e => e.TeamFifaApiId).HasColumnName("team_fifa_api_id");
         });

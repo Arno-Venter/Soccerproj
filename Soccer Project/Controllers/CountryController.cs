@@ -16,7 +16,8 @@ namespace Soccer_Project.Controllers
         }
 
         [HttpGet]
-        public List<Country> getAll() {
+        public List<Country> getAll()
+        {
             return service.getAll();
         }
     }

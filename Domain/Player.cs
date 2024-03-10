@@ -11,11 +11,11 @@ public partial class Player
 
     public string? PlayerName { get; set; }
 
-    public int? PlayFifaApiId { get; set; }
+    public int? PlayerFifaApiId { get; set; }
 
     public string? Birthday { get; set; }
 
-    public decimal? Height { get; set; }
+    public int? Height { get; set; }
 
-    public decimal? Weight { get; set; }
+    public int? Weight { get; set; }
 }

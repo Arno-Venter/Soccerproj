@@ -234,4 +234,8 @@ public partial class Match
     public double? Bsd { get; set; }
 
     public double? Bsa { get; set; }
+
+    public virtual Country? Country { get; set; }
+
+    public virtual League? League { get; set; }
 }
